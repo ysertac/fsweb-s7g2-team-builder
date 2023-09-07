@@ -1,0 +1,65 @@
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.members {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.members .card {
+  width: 17% !important;
+}
+
+.main-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.main a {
+  background-color: black;
+  color: white;
+  padding: 1rem;
+  border-radius: 25px;
+  width: 20rem;
+  text-align: center;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.homepage-link {
+  display: inline-block;
+  width: 100% !important;
+}
+
+label {
+  width: 100%;
+}
+
+.uye-kayit {
+  width: 50%;
+  margin: 2rem auto;
+}
+
+.card {
+  margin-top: 2rem;
+}
+
+.active {
+  display: none;
+}
+
+.passive {
+  background-color: black;
+  border-radius: 25px;
+  color: white;
+  padding: 1rem;
+  width: 20%;
+  text-align: center;
+}
