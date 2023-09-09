@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, FormGroup, Input, Label } from "reactstrap";
 import { Link } from "react-router-dom";
 
 export default function UyeKayit(props) {
-  const { changeHandler, submitHandler, formData } = props;
+  const { changeHandler, submitHandler, formData, membersFormSchema, errors } =
+    props;
+  const [isValid, setValid] = useState(false);
+
+  useEffect(() => {
+    membersFormSchema.isValid(formData).then((valid) => setValid(valid));
+  }, [formData]);
   return (
     <div className="uye-kayit">
       <Form onSubmit={submitHandler}>
@@ -17,6 +23,7 @@ export default function UyeKayit(props) {
               onChange={changeHandler}
             />
           </Label>
+          <p className="error">{errors.name}</p>
         </FormGroup>
         <FormGroup>
           <Label>
@@ -29,12 +36,19 @@ export default function UyeKayit(props) {
               onChange={changeHandler}
             />
           </Label>
+          <p className="error">{errors.email}</p>
         </FormGroup>
         <FormGroup>
           <Label style={{ display: "flex", justifyContent: "space-between" }}>
             Kullanım Koşulları:
-            <Input type="checkbox" />
+            <Input
+              type="checkbox"
+              name="terms"
+              checked={formData.terms}
+              onChange={changeHandler}
+            />
           </Label>
+          <p className="error">{errors.terms}</p>
         </FormGroup>
         <FormGroup>
           <Label>
@@ -46,9 +60,10 @@ export default function UyeKayit(props) {
               onChange={changeHandler}
             />
           </Label>
+          <p className="error">{errors.rol}</p>
         </FormGroup>
         <FormGroup>
-          <Input type="submit" value={"Kaydet"} />
+          <Input type="submit" value={"Kaydet"} disabled={!isValid} />
         </FormGroup>
       </Form>
       <Link className="homepage-link" exact to="/">

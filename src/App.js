@@ -1,9 +1,10 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch, Route, Link, useHistory } from "react-router-dom";
 import UyeKayit from "./components/UyeKayit";
 import Uyeler from "./components/Uyeler";
 import membersData from "./data";
+import * as Yup from "yup";
 
 function App() {
   const formDataInitial = {
@@ -11,9 +12,28 @@ function App() {
     name: "",
     email: "",
     rol: "",
+    terms: false,
   };
   const [formData, setFormData] = useState(formDataInitial);
   const [members, setMembers] = useState(membersData);
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    rol: "",
+    terms: "",
+  });
+
+  const membersFormSchema = Yup.object().shape({
+    name: Yup.string()
+      .required("İsim giriniz")
+      .min(3, "En az 3 karakter olmak zorunda"),
+    email: Yup.string()
+      .required("Email giriniz")
+      .email("Geçerli bir email adresi giriniz"),
+    rol: Yup.string().required("Görevi giriniz"),
+    terms: Yup.boolean().oneOf([true], "Şartları kabul ediniz"),
+  });
+
   let history = useHistory();
 
   const submitHandler = (e) => {
@@ -44,6 +64,11 @@ function App() {
     let { value, type, name, checked } = e.target;
     value = type == "checkbox" ? checked : value;
     setFormData({ ...formData, [name]: value });
+
+    Yup.reach(membersFormSchema, name)
+      .validate(value)
+      .then((response) => setErrors({ ...errors, [name]: "" }))
+      .catch((err) => setErrors({ ...errors, [name]: err.errors[0] }));
   };
   return (
     <div className="main">
@@ -53,6 +78,8 @@ function App() {
             changeHandler={changeHandler}
             submitHandler={submitHandler}
             formData={formData}
+            membersFormSchema={membersFormSchema}
+            errors={errors}
           />
         </Route>
         <Route exact path="/">
